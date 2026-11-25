@@ -3,14 +3,11 @@ const os = require('node:os');
 const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
 const bcrypt = require('bcryptjs');
+const SCHEMA_SQL = require('./schema');
 
 const DEFAULT_DB_PATH = process.env.VERCEL
   ? path.join(os.tmpdir(), 'marketflow.db')
   : path.join(__dirname, '..', 'data', 'marketflow.db');
-
-const SCHEMA_PATH = fs.existsSync(path.join(__dirname, 'schema.sql'))
-  ? path.join(__dirname, 'schema.sql')
-  : path.join(process.cwd(), 'db', 'schema.sql');
 
 function round2(n) {
   return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
@@ -60,8 +57,7 @@ function initDatabase(dbPath = process.env.DB_PATH || DEFAULT_DB_PATH) {
   }
   db.exec('PRAGMA busy_timeout = 5000;');
 
-  const schemaSql = fs.readFileSync(SCHEMA_PATH, 'utf8');
-  db.exec(schemaSql);
+  db.exec(SCHEMA_SQL);
 
   seedIfEmpty(db);
   return db;

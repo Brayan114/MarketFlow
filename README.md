@@ -20,7 +20,7 @@ npm start
 ```
 Then open **http://localhost:3000** in your browser.
 
-> **Offline Defence Ready:** Bootstrap 5, Bootstrap Icons, and Chart.js are installed locally via `npm` and served directly by Express under `/vendor/*`, so the entire application runs with zero internet access during your presentation.
+> **Offline Defence Ready:** Bootstrap 5, Bootstrap Icons, and Chart.js are bundled locally inside `public/vendor/`, so the entire application runs with zero internet access during your presentation.
 
 ### 3. Useful Commands
 - `npm start` — Start the Express server (auto-creates and seeds `data/marketflow.db` on first run)
@@ -44,17 +44,15 @@ Then open **http://localhost:3000** in your browser.
 
 ```text
 Project SuperMarket/
-├── api/
-│   └── index.js               # Vercel serverless function entrypoint
-├── server.js                  # Local development / demo HTTP server
-├── vercel.json                # Vercel routing & bundled assets configuration
+├── server.js                  # Express entrypoint (zero-config Vercel export + local HTTP server)
 ├── package.json
 ├── db/
-│   ├── schema.sql             # 11 normalized relational tables + constraints + indexes
+│   ├── schema.js              # Bundled SQL schema string for serverless & local setup
+│   ├── schema.sql             # 11 normalized relational tables + constraints + indexes (reference)
 │   ├── database.js            # SQLite initialization, transaction wrapper, seed data
 │   └── reset.js               # Clean database reset helper for demos
 ├── src/
-│   ├── app.js                 # Express app factory, static/vendor mounts, error handler
+│   ├── app.js                 # Express app factory, static mounts, error handler
 │   ├── middleware/
 │   │   ├── auth.js            # Authentication & RBAC enforcement
 │   │   └── session.js         # Stateless HMAC-SHA256 signed HttpOnly cookie sessions
@@ -76,6 +74,7 @@ Project SuperMarket/
 │   ├── login.html             # Staff sign-in screen + quick-fill demo credentials
 │   ├── index.html             # Authenticated workspace shell + modals
 │   ├── css/styles.css         # MarketFlow forest-green design tokens + print styles
+│   ├── vendor/                # Offline-bundled Bootstrap 5, Bootstrap Icons & Chart.js
 │   └── js/
 │       ├── api.js             # Fetch helper, formatting, confirm/receipt modals
 │       ├── app.js             # Role-based navigation & session bootstrap
@@ -96,9 +95,9 @@ Project SuperMarket/
 ## Deploying to Vercel
 
 1. Push this repository to GitHub.
-2. Import the repository in **Vercel** (Node.js `24.x` is configured via `package.json`).
+2. Import the repository in **Vercel** (zero-config Express preset auto-detects `server.js` + `public/`, with Node.js `24.x` via `package.json`).
 3. Add an environment variable in Vercel Project Settings:
    - `SESSION_SECRET` — any long random string used to sign staff session cookies.
-4. Deploy. Static assets in `public/` are served from Vercel's CDN, while `/api/*` and `/vendor/*` route through `api/index.js`.
+4. Deploy. Static assets in `public/` (including `public/vendor/`) are served from Vercel's CDN, while `/api/*` routes through `server.js`.
 
 > **Database Note on Serverless:** On Vercel (`VERCEL=1`), SQLite runs in `/tmp/marketflow.db` with auto-seeded demo data, which resets whenever a serverless instance cold-starts. For persistent local demonstrations during your project defence, run `npm start` locally (which persists to `data/marketflow.db`).

@@ -24,11 +24,7 @@ function createApp(db) {
   app.use(express.json({ limit: '1mb' }));
   app.use(sessionMiddleware());
 
-  // Local vendor assets so live defence works completely offline
-  app.use('/vendor/bootstrap', express.static(path.join(rootDir, 'node_modules/bootstrap/dist')));
-  app.use('/vendor/bootstrap-icons', express.static(path.join(rootDir, 'node_modules/bootstrap-icons/font')));
-  app.use('/vendor/chart.js', express.static(path.join(rootDir, 'node_modules/chart.js/dist')));
-
+  // Serve public assets (includes offline vendor assets under public/vendor/)
   app.use(express.static(path.join(rootDir, 'public')));
 
   app.get('/api/health', (req, res) => {
@@ -48,10 +44,6 @@ function createApp(db) {
 
   app.use('/api', (req, res) => {
     res.status(404).json({ error: 'API endpoint not found' });
-  });
-
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(rootDir, 'public', 'index.html'));
   });
 
   app.use((err, req, res, next) => {
