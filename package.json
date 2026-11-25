@@ -1,0 +1,22 @@
+{
+  "name": "marketflow-supermarket",
+  "version": "1.0.0",
+  "description": "MarketFlow - Automated Supermarket Management System (Year 3 System Analysis & Design Project)",
+  "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node --no-warnings server.js",
+    "reset-db": "node --no-warnings db/reset.js",
+    "test": "node --no-warnings --test tests/api.test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "chart.js": "^4.4.7",
+    "express": "^4.21.2"
+  }
+}

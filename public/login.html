@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — MarketFlow Supermarket Management System</title>
+  <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/vendor/bootstrap-icons/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="login-wrapper">
+    <div class="login-shell">
+      <div class="mf-card p-4 p-md-4 mb-3">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <div class="sidebar-logo-mark" style="background-color: var(--mf-primary); color: #fff;">
+            <i class="bi bi-cart-check-fill"></i>
+          </div>
+          <div>
+            <h1 class="h4 mb-0">MarketFlow</h1>
+            <p class="text-muted mb-0" style="font-size: 13px;">Automated Supermarket Management &amp; POS</p>
+          </div>
+        </div>
+
+        <div id="loginError" class="alert alert-danger d-none py-2 px-3" role="alert"></div>
+
+        <form id="loginForm" novalidate>
+          <div class="mb-3">
+            <label for="emailInput" class="form-label fw-semibold">Staff Email</label>
+            <input
+              type="email"
+              class="form-control"
+              id="emailInput"
+              name="email"
+              placeholder="e.g. cashier@marketflow.local"
+              required
+              autocomplete="username"
+            >
+          </div>
+
+          <div class="mb-3">
+            <label for="passwordInput" class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <input
+                type="password"
+                class="form-control"
+                id="passwordInput"
+                name="password"
+                placeholder="Enter your password"
+                required
+                autocomplete="current-password"
+              >
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="togglePasswordBtn"
+                aria-label="Show or hide password"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="loginSubmitBtn" class="btn btn-primary w-100 mt-2">
+            <span id="loginSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+            <span id="loginBtnText">Sign In</span>
+          </button>
+        </form>
+
+        <p class="text-muted mt-3 mb-0" style="font-size: 12px;">
+          <i class="bi bi-shield-lock me-1"></i>
+          Staff accounts are provisioned by the System Administrator or Store Manager.
+        </p>
+      </div>
+
+      <div class="mf-card p-3">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <span class="fw-semibold" style="font-size: 13px;">
+            <i class="bi bi-person-badge me-1 text-success"></i>Demo Accounts (Click Fill to Test Roles)
+          </span>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-sm mb-0" style="font-size: 12px;">
+            <thead>
+              <tr class="text-muted">
+                <th>Role</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="fw-semibold">Admin</span></td>
+                <td><code>admin@marketflow.local</code></td>
+                <td><code>admin123</code></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 quick-fill-btn" data-email="admin@marketflow.local" data-pass="admin123">Fill</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="fw-semibold">Manager</span></td>
+                <td><code>manager@marketflow.local</code></td>
+                <td><code>manager123</code></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 quick-fill-btn" data-email="manager@marketflow.local" data-pass="manager123">Fill</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="fw-semibold">Cashier</span></td>
+                <td><code>cashier@marketflow.local</code></td>
+                <td><code>cashier123</code></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 quick-fill-btn" data-email="cashier@marketflow.local" data-pass="cashier123">Fill</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="fw-semibold">Inventory</span></td>
+                <td><code>inventory@marketflow.local</code></td>
+                <td><code>inventory123</code></td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2 quick-fill-btn" data-email="inventory@marketflow.local" data-pass="inventory123">Fill</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          window.location.replace('/');
+          return;
+        }
+      } catch (_) {}
+
+      const form = document.getElementById('loginForm');
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const errorBox = document.getElementById('loginError');
+      const submitBtn = document.getElementById('loginSubmitBtn');
+      const spinner = document.getElementById('loginSpinner');
+      const btnText = document.getElementById('loginBtnText');
+      const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+
+      togglePasswordBtn.addEventListener('click', () => {
+        const isPwd = passwordInput.type === 'password';
+        passwordInput.type = isPwd ? 'text' : 'password';
+        togglePasswordBtn.innerHTML = isPwd ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+      });
+
+      document.querySelectorAll('.quick-fill-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          emailInput.value = btn.dataset.email;
+          passwordInput.value = btn.dataset.pass;
+          errorBox.classList.add('d-none');
+          submitBtn.focus();
+        });
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorBox.classList.add('d-none');
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        if (!email || !password) {
+          errorBox.textContent = 'Please enter both your staff email and password.';
+          errorBox.classList.remove('d-none');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        spinner.classList.remove('d-none');
+        btnText.textContent = 'Signing in...';
+
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            throw new Error(data.error || 'Sign in failed');
+          }
+          window.location.href = '/';
+        } catch (err) {
+          errorBox.textContent = err.message;
+          errorBox.classList.remove('d-none');
+          submitBtn.disabled = false;
+          spinner.classList.add('d-none');
+          btnText.textContent = 'Sign In';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

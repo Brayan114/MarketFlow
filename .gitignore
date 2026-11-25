@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Local SQLite database files (auto-generated on startup / npm run reset-db)
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# Local SAD defence docs (kept locally, excluded from GitHub push)
+docs/
+docs/SYSTEM_DESIGN.md
+
+# Environment & deployment metadata
+.env
+.env.*
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS & editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "{db/schema.sql,node_modules/bootstrap/dist/**,node_modules/bootstrap-icons/font/**,node_modules/chart.js/dist/**}"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
+    { "source": "/vendor/(.*)", "destination": "/api/index.js" }
+  ]
+}
