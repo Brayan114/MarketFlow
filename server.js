@@ -1,5 +1,5 @@
 const { initDatabase } = require('./db/database');
-const { createApp } = require('./src/app');
+const { createApp } = require('./src/createApp');
 
 const db = initDatabase();
 const app = createApp(db);

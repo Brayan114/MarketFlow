@@ -52,7 +52,7 @@ Project SuperMarket/
 │   ├── database.js            # SQLite initialization, transaction wrapper, seed data
 │   └── reset.js               # Clean database reset helper for demos
 ├── src/
-│   ├── app.js                 # Express app factory, static mounts, error handler
+│   ├── createApp.js           # Express app factory, static mounts, error handler
 │   ├── middleware/
 │   │   ├── auth.js            # Authentication & RBAC enforcement
 │   │   └── session.js         # Stateless HMAC-SHA256 signed HttpOnly cookie sessions

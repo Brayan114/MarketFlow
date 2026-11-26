@@ -5,7 +5,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 const { initDatabase, round2 } = require('../db/database');
-const { createApp } = require('../src/app');
+const { createApp } = require('../src/createApp');
 
 function createClient(baseUrl) {
   let cookie = '';

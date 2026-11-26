@@ -27,6 +27,10 @@ function createApp(db) {
   // Serve public assets (includes offline vendor assets under public/vendor/)
   app.use(express.static(path.join(rootDir, 'public')));
 
+  app.get('/favicon.ico', (req, res) => {
+    res.status(204).end();
+  });
+
   app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', app: 'MarketFlow' });
   });
@@ -44,6 +48,14 @@ function createApp(db) {
 
   app.use('/api', (req, res) => {
     res.status(404).json({ error: 'API endpoint not found' });
+  });
+
+  app.get('/', (req, res) => {
+    const indexPath = path.join(rootDir, 'public', 'index.html');
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
+    return res.redirect(302, '/index.html');
   });
 
   app.use((err, req, res, next) => {
