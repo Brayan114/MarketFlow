@@ -1,8 +1,9 @@
+const express = require('express');
 const { initDatabase } = require('./db/database');
 const { createApp } = require('./src/createApp');
 
 const db = initDatabase();
-const app = createApp(db);
+const app = createApp(db, express);
 
 if (require.main === module && !process.env.VERCEL) {
   const PORT = Number(process.env.PORT) || 3000;

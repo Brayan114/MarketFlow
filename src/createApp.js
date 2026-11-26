@@ -14,18 +14,18 @@ const createReportsRouter = require('./routes/reports');
 const createAuditRouter = require('./routes/audit');
 const createSettingsRouter = require('./routes/settings');
 
-function createApp(db) {
-  const app = express();
+function createApp(db, expressLib = express) {
+  const app = expressLib();
   const rootDir = fs.existsSync(path.join(__dirname, '..', 'package.json'))
     ? path.join(__dirname, '..')
     : process.cwd();
 
   app.set('trust proxy', 1);
-  app.use(express.json({ limit: '1mb' }));
+  app.use(expressLib.json({ limit: '1mb' }));
   app.use(sessionMiddleware());
 
   // Serve public assets (includes offline vendor assets under public/vendor/)
-  app.use(express.static(path.join(rootDir, 'public')));
+  app.use(expressLib.static(path.join(rootDir, 'public')));
 
   app.get('/favicon.ico', (req, res) => {
     res.status(204).end();
